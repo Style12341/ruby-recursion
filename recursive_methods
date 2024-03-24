@@ -1,0 +1,45 @@
+# frozen_string_literal: true
+
+require 'pry'
+# Using memoization to optimize recursive methods with global variable
+$memo = {}
+def fib(n)
+  if n.zero?
+    0
+  elsif n == 1
+    1
+  elsif $memo[n]
+    $memo[n]
+  else
+    $memo[n] = fib(n - 1) + fib(n - 2)
+    $memo[n]
+  end
+end
+
+def merge(left, right)
+  result = []
+  until left.empty? || right.empty?
+    result << if left.first < right.first
+                left.shift
+              else
+                right.shift
+              end
+  end
+  result << left.shift until left.empty?
+  result << right.shift until right.empty?
+  result
+end
+
+def merge_sort(arr)
+  return arr if arr.length <= 1
+
+  mid = arr.length / 2
+  left = arr[0...mid]
+  right = arr[mid..]
+  left = merge_sort(left)
+  right = merge_sort(right)
+  merge(left, right)
+end
+arr = [3, 2, 1, 5, 4, 6, 7, 8, 9]
+p fib(5000)
+p merge_sort(arr)
